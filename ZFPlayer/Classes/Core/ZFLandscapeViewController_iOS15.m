@@ -1,5 +1,5 @@
 //
-//  ZFLandScaprWindow.h
+//  ZFLandscapeViewController_iOS15.m
 //  ZFPlayer
 //
 // Copyright (c) 2020年 任子丰 ( http://github.com/renzifeng )
@@ -22,16 +22,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
-#import "ZFLandscapeViewController.h"
-@class ZFLandscapeRotationManager;
+#import "ZFLandscapeViewController_iOS15.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation ZFLandscapeViewController_iOS15
 
-@interface ZFLandscapeWindow : UIWindow
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    _playerSuperview = [[UIView alloc] initWithFrame:CGRectZero];
+    _playerSuperview.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:_playerSuperview];
+}
 
-@property (nonatomic, weak) ZFLandscapeRotationManager *rotationManager;
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return [self.delegate ls_shouldAutorotate];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    UIInterfaceOrientation currentOrientation = (UIInterfaceOrientation)[UIDevice currentDevice].orientation;
+    if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+        return UIInterfaceOrientationMaskLandscape;
+    }
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    UIInterfaceOrientation currentOrientation = (UIInterfaceOrientation)[UIDevice currentDevice].orientation;
+    if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+        return YES;
+    }
+    return NO;
+}
 
 @end
-
-NS_ASSUME_NONNULL_END
