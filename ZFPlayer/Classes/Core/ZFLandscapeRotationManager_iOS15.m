@@ -77,7 +77,7 @@
 #pragma mark - ZFLandscapeViewControllerDelegate
 
 - (BOOL)ls_shouldAutorotate {
-    if (self.allowOrientationRotation || self.forceRotaion) {
+    if ((self.allowOrientationRotation && !self.isLockedScreen) || self.forceRotaion) {
         [self rotationBegin];
         return YES;
     }
@@ -86,6 +86,7 @@
 
 - (void)rotationFullscreenViewController:(ZFLandscapeViewController *)viewController viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     UIInterfaceOrientation toOrientation = (UIInterfaceOrientation)[UIDevice currentDevice].orientation;
+    self.currentOrientation = toOrientation;
     UIView *playerSuperview = self.landscapeViewController.playerSuperview;
     if (UIInterfaceOrientationIsLandscape(toOrientation) && self.contentView.superview != playerSuperview) {
         CGRect targetRect = [self.containerView convertRect:self.containerView.bounds toView:self.containerView.window];
